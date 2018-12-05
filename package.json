@@ -1,0 +1,36 @@
+{
+  "name": "myrenamer",
+  "version": "0.1.0",
+  "description": "Rename Zawgyi <=> Unicode",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register ./test/*.spec.ts",
+    "build": "tsc"
+  },
+  "keywords": [
+    "Rename Zawgyi<=>Unicode",
+    "zawgyi",
+    "unicode",
+    "myanmar"
+  ],
+  "author": "Aung Myo Kyaw",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/AungMyoKyaw/myRenamer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AungMyoKyaw/myRenamer/issues"
+  },
+  "homepage": "https://github.com/AungMyoKyaw/myRenamer#README",
+  "devDependencies": {
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.10",
+    "mocha": "^5.2.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.1"
+  },
+  "dependencies": {
+    "myanmar-tools": "^1.1.1"
+  }
+}
