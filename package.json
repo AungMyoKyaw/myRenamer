@@ -1,6 +1,6 @@
 {
   "name": "myrenamer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Rename Zawgyi <=> Unicode",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
