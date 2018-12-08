@@ -47,7 +47,7 @@ file.toUnicode();
 [contri-url]: https://github.com/AungMyoKyaw/myRenamer/issues
 [travis]: https://img.shields.io/travis/AungMyoKyaw/myRenamer/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/AungMyoKyaw/myRenamer
-[npm-download]: https://img.shields.io/npm/dt/mynum.svg?style=flat-square
+[npm-download]: https://img.shields.io/npm/dt/myrenamer.svg?style=flat-square
 [npm-dl-url]: https://www.npmjs.com/package/myrenamer
 [license]: https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square
 [license-url]: https://opensource.org/licenses/MIT
