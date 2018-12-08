@@ -18,6 +18,7 @@ npm install myrenamer
 
 - [toZawgyi](#toZawgyi)
 - [toUnicode](#toUnicode)
+- [toggle](#toggle)
 
 ### toZawgyi
 
@@ -30,6 +31,19 @@ file.toZawgyi();
 ```
 
 ### toUnicode
+
+```javascript
+const myRenamer = require('myrenamer');
+const folder = new myRenamer('~/folder');
+const file = new myRenamer('~/file');
+folder.toUnicode();
+file.toUnicode();
+```
+
+### toggle
+
+Zawgyi file/folder will be renamed to Unicode.
+Unicode file/folder will be renamed to Zawgyi.
 
 ```javascript
 const myRenamer = require('myrenamer');

@@ -83,6 +83,13 @@ class myRenamer {
 
   toggle(): void {
     const score = this.getZawgyiProbability(this.baseName);
+    if (score > this.decisionBoundary) {
+      //ZAWGYI=>UNICODE
+      this.toUnicode();
+    } else {
+      //UNICODE=>ZAWGYI
+      this.toZawgyi();
+    }
   }
 }
 

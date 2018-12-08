@@ -87,4 +87,35 @@ describe('MY_RENAMER', () => {
       assert.equal(1, 1);
     });
   });
+
+  describe('TOGGLE', () => {
+    before(() => {
+      try {
+        zawgyiName = `${zawgyiName}${Math.floor(Math.random() * 1e10)}`;
+        unicodeName = `${unicodeName}${Math.floor(Math.random() * 1e10)}`;
+        if (!fs.existsSync(`${process.cwd()}/test/file/`)) {
+          fs.mkdirSync(`${process.cwd()}/test/file/`);
+        }
+        fs.mkdirSync(`${process.cwd()}/test/file/${zawgyiName}`);
+        fs.writeFileSync(
+          `${process.cwd()}/test/file/${unicodeName}.txt`,
+          '',
+          'utf8'
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    });
+
+    it('TOGGLE', () => {
+      const folder = new myRenamer(`${process.cwd()}/test/file/${zawgyiName}`);
+      const file = new myRenamer(
+        `${process.cwd()}/test/file/${unicodeName}.txt`
+      );
+      const { isZawgyi } = file;
+      folder.toggle();
+      file.toggle();
+      assert.equal(1, 1);
+    });
+  });
 });
