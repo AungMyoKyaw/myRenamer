@@ -27,6 +27,7 @@ class myRenamer {
 
   private newZawgyiPath(filePath: string): string {
     let parsedPath = path.parse(filePath);
+    delete parsedPath.base;
     parsedPath.name = converter.unicodeToZawgyi(parsedPath.name);
     return path.format(parsedPath);
   }
