@@ -49,8 +49,8 @@ Unicode file/folder will be renamed to Zawgyi.
 const myRenamer = require('myrenamer');
 const folder = new myRenamer('~/folder');
 const file = new myRenamer('~/file');
-folder.toUnicode();
-file.toUnicode();
+folder.toggle();
+file.toggle();
 ```
 
 ## LICENSE

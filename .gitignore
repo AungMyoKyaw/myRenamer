@@ -1,6 +1,5 @@
 .DS_Store
 node_modules/*
-!node_modules/@types/myanmar-tools
 dist/
 test/file
 test/.DS_Store
