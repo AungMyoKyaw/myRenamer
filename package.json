@@ -2,7 +2,7 @@
   "name": "myrenamer",
   "version": "0.2.1",
   "description": "Rename Zawgyi <-=-> Unicode",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
     "test": "mocha -r ts-node/register ./test/*.spec.ts",
