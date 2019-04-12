@@ -55,7 +55,7 @@ file.toggle();
 
 ## LICENSE
 
-MIT © [Aung Myo Kyaw](https://github.com/AungMyoKyaw)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FAungMyoKyaw%2FmyRenamer.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FAungMyoKyaw%2FmyRenamer?ref=badge_large)
 
 [contri]: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square
 [contri-url]: https://github.com/AungMyoKyaw/myRenamer/issues
