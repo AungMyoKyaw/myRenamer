@@ -1,18 +1,22 @@
 {
   "name": "myrenamer",
   "version": "0.2.2",
-  "description": "Rename Zawgyi <-=-> Unicode",
+  "description": "Rename Zawgyi <-=-> Unicode - A tool to convert file and folder names between Zawgyi and Unicode encodings",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
     "test": "mocha -r ts-node/register ./test/*.spec.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "prettier --check 'src/**/*.ts' 'test/**/*.ts'",
+    "format": "prettier --write 'src/**/*.ts' 'test/**/*.ts'"
   },
   "keywords": [
     "Rename Zawgyi<=>Unicode",
     "zawgyi",
     "unicode",
-    "myanmar"
+    "myanmar",
+    "file-renamer",
+    "encoding-converter"
   ],
   "author": "Aung Myo Kyaw",
   "license": "MIT",
@@ -24,12 +28,21 @@
     "url": "https://github.com/AungMyoKyaw/myRenamer/issues"
   },
   "homepage": "https://github.com/AungMyoKyaw/myRenamer#README",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "devDependencies": {
-    "@types/mocha": "^5.2.5",
-    "@types/node": "^10.12.10",
-    "mocha": "^5.2.0",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.2.1"
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.0",
+    "mocha": "^10.2.0",
+    "prettier": "^3.2.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "myanmar-tools": "^1.1.1"
