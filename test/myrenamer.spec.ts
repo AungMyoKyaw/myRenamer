@@ -1,121 +1,222 @@
-import myRenamer from '../src/';
+import MyRenamer from '../src/';
 import * as assert from 'assert';
 import fs from 'fs';
+import path from 'path';
 
 import 'mocha';
 
-let zawgyiName = 'ဗမာျပည္သည္တို႔ျပည္';
-let unicodeName = 'ဗမာပြည်သည်တို့ပြည်';
+const TEST_DIR = path.join(process.cwd(), 'test', 'file');
 
-describe('MY_RENAMER', () => {
-  describe('RENAME TO ZAWGYI', () => {
-    before(() => {
-      try {
-        unicodeName = `${unicodeName}${Math.floor(Math.random() * 1e10)}`;
-        if (!fs.existsSync(`${process.cwd()}/test/file/`)) {
-          fs.mkdirSync(`${process.cwd()}/test/file/`);
-        }
-        fs.mkdirSync(`${process.cwd()}/test/file/${unicodeName}`);
-        fs.writeFileSync(
-          `${process.cwd()}/test/file/${unicodeName}.txt`,
-          '',
-          'utf8'
-        );
-      } catch (e) {}
+// Test data
+const zawgyiSample = 'ဗမာျပည္သည္တို႔ျပည္';
+const unicodeSample = 'ဗမာပြည်သည်တို့ပြည်';
+
+/**
+ * Helper to generate unique test names
+ */
+function generateUniqueName(base: string): string {
+  return `${base}${Math.floor(Math.random() * 1e10)}`;
+}
+
+/**
+ * Helper to ensure test directory exists
+ */
+function ensureTestDir(): void {
+  if (!fs.existsSync(TEST_DIR)) {
+    fs.mkdirSync(TEST_DIR, { recursive: true });
+  }
+}
+
+/**
+ * Helper to clean up test files after tests
+ */
+function cleanupTestFiles(): void {
+  if (fs.existsSync(TEST_DIR)) {
+    const files = fs.readdirSync(TEST_DIR);
+    files.forEach((file) => {
+      const filePath = path.join(TEST_DIR, file);
+      if (fs.statSync(filePath).isDirectory()) {
+        fs.rmdirSync(filePath, { recursive: true });
+      } else {
+        fs.unlinkSync(filePath);
+      }
+    });
+  }
+}
+
+describe('MyRenamer', () => {
+  describe('Constructor', () => {
+    it('should create instance with valid path', () => {
+      const renamer = new MyRenamer('/valid/path');
+      assert.strictEqual(renamer.originalPath, '/valid/path');
     });
 
-    it('SHOULD RENAME TO ZAWGYI', () => {
-      const folder = new myRenamer(`${process.cwd()}/test/file/${unicodeName}`);
-      const file = new myRenamer(
-        `${process.cwd()}/test/file/${unicodeName}.txt`
+    it('should throw error with empty path', () => {
+      assert.throws(
+        () => new MyRenamer(''),
+        /File path cannot be empty/
       );
-      const { isZawgyi } = file;
-      folder.toZawgyi();
-      file.toZawgyi();
-      assert.equal(1, 1);
     });
 
-    it('SHOULD NOT RENAME TO ZAWGYI', () => {
-      const folder = new myRenamer(`${process.cwd()}/test/file/${zawgyiName}`);
-      const file = new myRenamer(
-        `${process.cwd()}/test/file/${zawgyiName}.txt`
+    it('should throw error with whitespace-only path', () => {
+      assert.throws(
+        () => new MyRenamer('   '),
+        /File path cannot be empty/
       );
-      const { isZawgyi } = file;
-      folder.toZawgyi({ check: true });
-      file.toZawgyi({ check: true });
-      assert.equal(1, 1);
     });
   });
 
-  describe('RENAME TO UNICODE', () => {
-    before(() => {
-      try {
-        zawgyiName = `${zawgyiName}${Math.floor(Math.random() * 1e10)}`;
-        if (!fs.existsSync(`${process.cwd()}/test/file/`)) {
-          fs.mkdirSync(`${process.cwd()}/test/file/`);
-        }
-        fs.mkdirSync(`${process.cwd()}/test/file/${zawgyiName}`);
-        fs.writeFileSync(
-          `${process.cwd()}/test/file/${zawgyiName}.txt`,
-          '',
-          'utf8'
-        );
-      } catch (e) {
-        console.log(e);
-      }
+  describe('Properties', () => {
+    it('should return original path', () => {
+      const renamer = new MyRenamer('/test/file.txt');
+      assert.strictEqual(renamer.originalPath, '/test/file.txt');
     });
 
-    it('SHOULD RENAME TO UNICODE', () => {
-      const folder = new myRenamer(`${process.cwd()}/test/file/${zawgyiName}`);
-      const file = new myRenamer(
-        `${process.cwd()}/test/file/${zawgyiName}.txt`
-      );
-      const { isZawgyi } = file;
-      folder.toUnicode();
-      file.toUnicode();
-      assert.equal(1, 1);
-    });
-
-    it('SHOULD NOT RENAME TO UNICODE', () => {
-      const folder = new myRenamer(`${process.cwd()}/test/file/${unicodeName}`);
-      const file = new myRenamer(
-        `${process.cwd()}/test/file/${unicodeName}.txt`
-      );
-      const { isZawgyi } = file;
-      folder.toUnicode({ check: true });
-      file.toUnicode({ check: true });
-      assert.equal(1, 1);
+    it('should return base name', () => {
+      const renamer = new MyRenamer('/test/file.txt');
+      assert.strictEqual(renamer.name, 'file.txt');
     });
   });
 
-  describe('TOGGLE', () => {
-    before(() => {
-      try {
-        zawgyiName = `${zawgyiName}${Math.floor(Math.random() * 1e10)}`;
-        unicodeName = `${unicodeName}${Math.floor(Math.random() * 1e10)}`;
-        if (!fs.existsSync(`${process.cwd()}/test/file/`)) {
-          fs.mkdirSync(`${process.cwd()}/test/file/`);
-        }
-        fs.mkdirSync(`${process.cwd()}/test/file/${zawgyiName}`);
-        fs.writeFileSync(
-          `${process.cwd()}/test/file/${unicodeName}.txt`,
-          '',
-          'utf8'
-        );
-      } catch (e) {
-        console.log(e);
-      }
+  describe('isZawgyi', () => {
+    it('should return high probability for Zawgyi text', () => {
+      const renamer = new MyRenamer(`/test/${zawgyiSample}.txt`);
+      const probability = renamer.isZawgyi;
+      assert.ok(probability > 0.5, `Expected probability > 0.5, got ${probability}`);
     });
 
-    it('TOGGLE', () => {
-      const folder = new myRenamer(`${process.cwd()}/test/file/${zawgyiName}`);
-      const file = new myRenamer(
-        `${process.cwd()}/test/file/${unicodeName}.txt`
-      );
-      const { isZawgyi } = file;
-      folder.toggle();
-      file.toggle();
-      assert.equal(1, 1);
+    it('should return low probability for Unicode text', () => {
+      const renamer = new MyRenamer(`/test/${unicodeSample}.txt`);
+      const probability = renamer.isZawgyi;
+      assert.ok(probability < 0.5, `Expected probability < 0.5, got ${probability}`);
+    });
+  });
+
+  describe('toZawgyi', () => {
+    let unicodeName: string;
+
+    before(() => {
+      ensureTestDir();
+      unicodeName = generateUniqueName(unicodeSample);
+      fs.writeFileSync(path.join(TEST_DIR, `${unicodeName}.txt`), '', 'utf8');
+    });
+
+    after(cleanupTestFiles);
+
+    it('should rename Unicode file to Zawgyi', () => {
+      const filePath = path.join(TEST_DIR, `${unicodeName}.txt`);
+      const renamer = new MyRenamer(filePath);
+      const result = renamer.toZawgyi();
+
+      assert.strictEqual(result.renamed, true);
+      assert.strictEqual(result.originalPath, filePath);
+      assert.ok(result.newPath);
+    });
+
+    it('should skip renaming with check option when already Zawgyi', () => {
+      const filePath = path.join(TEST_DIR, `${zawgyiSample}.txt`);
+      fs.writeFileSync(filePath, '', 'utf8');
+
+      const renamer = new MyRenamer(filePath);
+      const result = renamer.toZawgyi({ check: true });
+
+      assert.strictEqual(result.renamed, false);
+      assert.ok(result.reason);
+    });
+  });
+
+  describe('toUnicode', () => {
+    let zawgyiName: string;
+
+    before(() => {
+      ensureTestDir();
+      zawgyiName = generateUniqueName(zawgyiSample);
+      fs.writeFileSync(path.join(TEST_DIR, `${zawgyiName}.txt`), '', 'utf8');
+    });
+
+    after(cleanupTestFiles);
+
+    it('should rename Zawgyi file to Unicode', () => {
+      const filePath = path.join(TEST_DIR, `${zawgyiName}.txt`);
+      const renamer = new MyRenamer(filePath);
+      const result = renamer.toUnicode();
+
+      assert.strictEqual(result.renamed, true);
+      assert.strictEqual(result.originalPath, filePath);
+      assert.ok(result.newPath);
+    });
+
+    it('should skip renaming with check option when already Unicode', () => {
+      const filePath = path.join(TEST_DIR, `${unicodeSample}.txt`);
+      fs.writeFileSync(filePath, '', 'utf8');
+
+      const renamer = new MyRenamer(filePath);
+      const result = renamer.toUnicode({ check: true });
+
+      assert.strictEqual(result.renamed, false);
+      assert.ok(result.reason);
+    });
+  });
+
+  describe('toggle', () => {
+    let zawgyiName: string;
+    let unicodeName: string;
+
+    before(() => {
+      ensureTestDir();
+      zawgyiName = generateUniqueName(zawgyiSample);
+      unicodeName = generateUniqueName(unicodeSample);
+      fs.writeFileSync(path.join(TEST_DIR, `${zawgyiName}.txt`), '', 'utf8');
+      fs.writeFileSync(path.join(TEST_DIR, `${unicodeName}.txt`), '', 'utf8');
+    });
+
+    after(cleanupTestFiles);
+
+    it('should convert Zawgyi to Unicode when toggling', () => {
+      const filePath = path.join(TEST_DIR, `${zawgyiName}.txt`);
+      const renamer = new MyRenamer(filePath);
+      const result = renamer.toggle();
+
+      assert.strictEqual(result.renamed, true);
+    });
+
+    it('should convert Unicode to Zawgyi when toggling', () => {
+      const filePath = path.join(TEST_DIR, `${unicodeName}.txt`);
+      const renamer = new MyRenamer(filePath);
+      const result = renamer.toggle();
+
+      assert.strictEqual(result.renamed, true);
+    });
+  });
+
+  describe('Folder operations', () => {
+    let unicodeFolderName: string;
+    let zawgyiFolderName: string;
+
+    before(() => {
+      ensureTestDir();
+      unicodeFolderName = generateUniqueName(unicodeSample);
+      zawgyiFolderName = generateUniqueName(zawgyiSample);
+      fs.mkdirSync(path.join(TEST_DIR, unicodeFolderName), { recursive: true });
+      fs.mkdirSync(path.join(TEST_DIR, zawgyiFolderName), { recursive: true });
+    });
+
+    after(cleanupTestFiles);
+
+    it('should rename Unicode folder to Zawgyi', () => {
+      const folderPath = path.join(TEST_DIR, unicodeFolderName);
+      const renamer = new MyRenamer(folderPath);
+      const result = renamer.toZawgyi();
+
+      assert.strictEqual(result.renamed, true);
+    });
+
+    it('should rename Zawgyi folder to Unicode', () => {
+      const folderPath = path.join(TEST_DIR, zawgyiFolderName);
+      const renamer = new MyRenamer(folderPath);
+      const result = renamer.toUnicode();
+
+      assert.strictEqual(result.renamed, true);
     });
   });
 });
